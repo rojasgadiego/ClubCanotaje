@@ -1,0 +1,14 @@
+2026-02-16 23:00:17.680 -03:00 [INF] User profile is available. Using 'C:\Users\Dieg0\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-02-16 23:00:17.923 -03:00 [INF] Now listening on: https://localhost:7001
+2026-02-16 23:00:17.923 -03:00 [INF] Now listening on: http://localhost:5205
+2026-02-16 23:00:17.957 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-16 23:00:17.958 -03:00 [INF] Hosting environment: Development
+2026-02-16 23:00:17.958 -03:00 [INF] Content root path: C:\Users\Dieg0\source\repos\ClubCanotajeApp\ClubCanotajeApp
+2026-02-16 23:00:20.348 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7001/swagger/index.html - null null
+2026-02-16 23:00:20.491 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7001/swagger/index.html - 200 null text/html;charset=utf-8 146.5408ms
+2026-02-16 23:00:20.492 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7001/_framework/aspnetcore-browser-refresh.js - null null
+2026-02-16 23:00:20.492 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7001/_vs/browserLink - null null
+2026-02-16 23:00:20.499 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7001/_framework/aspnetcore-browser-refresh.js - 200 16515 application/javascript; charset=utf-8 6.7191ms
+2026-02-16 23:00:20.662 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7001/_vs/browserLink - 200 null text/javascript; charset=UTF-8 169.4502ms
+2026-02-16 23:00:20.684 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7001/swagger/v1/swagger.json - null null
+2026-02-16 23:00:20.706 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7001/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 21.8349ms

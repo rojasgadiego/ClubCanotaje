@@ -1,0 +1,591 @@
+[
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.AuthController",
+    "Method": "Login",
+    "RelativePath": "api/Auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Auth.LoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.AuthController",
+    "Method": "RecuperarPassword",
+    "RelativePath": "api/Auth/recuperar-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Validacion.RecuperarPasswordRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.AuthController",
+    "Method": "ReenviarCodigo",
+    "RelativePath": "api/Auth/reenviar-codigo",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Validacion.ReenviarCodigoRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.AuthController",
+    "Method": "Registro",
+    "RelativePath": "api/Auth/registro",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Auth.RegistroPublicoRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.AuthController",
+    "Method": "RegistroAdmin",
+    "RelativePath": "api/Auth/registro/admin",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Auth.RegistroAdminRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.AuthController",
+    "Method": "ResetPassword",
+    "RelativePath": "api/Auth/reset-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Validacion.ResetPasswordRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.AuthController",
+    "Method": "VerificarEmail",
+    "RelativePath": "api/Auth/verificar-email",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Validacion.VerificarEmailRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.CanoasController",
+    "Method": "GetAll",
+    "RelativePath": "api/Canoas",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.CanoasController",
+    "Method": "GetById",
+    "RelativePath": "api/Canoas/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.CanoasController",
+    "Method": "GetDisponibles",
+    "RelativePath": "api/Canoas/disponibles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.CanoasController",
+    "Method": "GetDisponiblesPorHorario",
+    "RelativePath": "api/Canoas/disponibles/horario",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fechaHora",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "duracionMin",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controllers.ImplementosController",
+    "Method": "GetAll",
+    "RelativePath": "api/Implementos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controllers.ImplementosController",
+    "Method": "Crear",
+    "RelativePath": "api/Implementos",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Implemento.CrearImplementoDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controllers.ImplementosController",
+    "Method": "GetById",
+    "RelativePath": "api/Implementos/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controllers.ImplementosController",
+    "Method": "Actualizar",
+    "RelativePath": "api/Implementos/{id}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Implemento.ActualizarImplementoDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controllers.ImplementosController",
+    "Method": "CambiarEstado",
+    "RelativePath": "api/Implementos/{id}/estado",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Implemento.CambiarEstadoImplementoDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controllers.ImplementosController",
+    "Method": "GetDisponibles",
+    "RelativePath": "api/Implementos/disponibles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controllers.ImplementosController",
+    "Method": "GetDisponiblesPorTipo",
+    "RelativePath": "api/Implementos/disponibles/tipo/{idTipo}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idTipo",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controllers.ImplementosController",
+    "Method": "Asignar",
+    "RelativePath": "api/Implementos/salida/{idSalida}/asignar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idSalida",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Implemento.AsignarImplementoDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controllers.ImplementosController",
+    "Method": "Devolver",
+    "RelativePath": "api/Implementos/salida/{idSalida}/devolver/{idImplemento}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idSalida",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "idImplemento",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.MembresiasController",
+    "Method": "Crear",
+    "RelativePath": "api/Membresias",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Membresia.CrearMembresiaDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.MembresiasController",
+    "Method": "RegistrarPago",
+    "RelativePath": "api/Membresias/cuotas/pago",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Membresia.RegistrarPagoDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.MembresiasController",
+    "Method": "GetCuotasPendientes",
+    "RelativePath": "api/Membresias/cuotas/pendientes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.MembresiasController",
+    "Method": "GetVigente",
+    "RelativePath": "api/Membresias/remador/{idRemador}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idRemador",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.RemadoresController",
+    "Method": "GetAll",
+    "RelativePath": "api/Remadores",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.RemadoresController",
+    "Method": "Crear",
+    "RelativePath": "api/Remadores",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Remador.CrearRemadorDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.RemadoresController",
+    "Method": "GetById",
+    "RelativePath": "api/Remadores/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.RemadoresController",
+    "Method": "Actualizar",
+    "RelativePath": "api/Remadores/{id}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Remador.ActualizarRemadorDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.SalidasController",
+    "Method": "CrearReserva",
+    "RelativePath": "api/Salidas",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Salida.CrearReservaDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.SalidasController",
+    "Method": "GetById",
+    "RelativePath": "api/Salidas/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.SalidasController",
+    "Method": "Cancelar",
+    "RelativePath": "api/Salidas/{id}/cancelar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Salida.CancelarReservaDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.SalidasController",
+    "Method": "Finalizar",
+    "RelativePath": "api/Salidas/{id}/finalizar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Salida.FinalizarSalidaDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.SalidasController",
+    "Method": "Iniciar",
+    "RelativePath": "api/Salidas/{id}/iniciar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Salida.IniciarSalidaDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.SalidasController",
+    "Method": "AgregarParticipante",
+    "RelativePath": "api/Salidas/{id}/participantes",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Salida.AgregarParticipanteDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.SalidasController",
+    "Method": "GetHistorial",
+    "RelativePath": "api/Salidas/historial",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "desde",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "hasta",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.SalidasController",
+    "Method": "GetProximas",
+    "RelativePath": "api/Salidas/proximas",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]

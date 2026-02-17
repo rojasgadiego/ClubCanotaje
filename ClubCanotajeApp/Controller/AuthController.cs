@@ -1,0 +1,94 @@
+﻿using ClubCanotajeAPI.Models.Dtos.Auth;
+using ClubCanotajeAPI.Models.Dtos.Validacion;
+using ClubCanotajeAPI.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ClubCanotajeAPI.Controller
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AuthController : ControllerBase
+    {
+        private readonly AuthService _service;
+        public AuthController(AuthService service) => _service = service;
+
+        /// <summary>Login → devuelve JWT</summary>
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody] LoginRequest dto)
+        {
+            var result = await _service.LoginAsync(dto);
+            return result.Success ? Ok(result) : Unauthorized(result);
+        }
+
+        /// <summary>
+        /// Registro público — cualquier persona puede registrarse.
+        /// Crea automáticamente un Remador + Usuario con rol Remador.
+        /// </summary>
+        [HttpPost("registro")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Registro([FromBody] RegistroPublicoRequest dto)
+        {
+            var result = await _service.RegistroPublicoAsync(dto);
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
+
+        /// <summary>
+        /// Registro administrativo — solo un Administrador puede usarlo.
+        /// Crea un usuario con cualquier rol sin vincular remador.
+        /// </summary>
+        [HttpPost("registro/admin")]
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> RegistroAdmin([FromBody] RegistroAdminRequest dto)
+        {
+            var result = await _service.RegistroAdminAsync(dto);
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
+
+        /// <summary>Lista de roles disponibles (para el formulario de registro admin)</summary>
+        //[HttpGet("roles")]
+        //[Authorize(Roles = "Administrador")]
+        //public async Task<IActionResult> GetRoles()
+        //{
+        //    var result = await _service.GetRolesAsync();
+        //    return Ok(result);
+        //}
+
+        /// <summary>Verificar email con código de 6 dígitos</summary>
+        [HttpPost("verificar-email")]
+        [AllowAnonymous]
+        public async Task<IActionResult> VerificarEmail([FromBody] VerificarEmailRequest dto)
+        {
+            var result = await _service.VerificarEmailAsync(dto.Email, dto.Codigo);
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
+
+        /// <summary>Reenviar código de verificación</summary>
+        [HttpPost("reenviar-codigo")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ReenviarCodigo([FromBody] ReenviarCodigoRequest dto)
+        {
+            var result = await _service.ReenviarCodigoAsync(dto.Email);
+            return Ok(result);
+        }
+
+        /// <summary>Solicitar recuperación de contraseña</summary>
+        [HttpPost("recuperar-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RecuperarPassword([FromBody] RecuperarPasswordRequest dto)
+        {
+            var result = await _service.SolicitarResetPasswordAsync(dto.Email);
+            return Ok(result); // Siempre 200 para no revelar si existe el email
+        }
+
+        /// <summary>Restablecer contraseña con código</summary>
+        [HttpPost("reset-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest dto)
+        {
+            var result = await _service.ResetPasswordAsync(dto.Email, dto.Codigo, dto.NuevaPassword);
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
+    }
+}
