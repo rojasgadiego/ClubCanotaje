@@ -41,6 +41,12 @@ namespace ClubCanotajeAPI.Context
         // ── Verificación de email ─────────────────────────────────
         public DbSet<CodigoVerificacion> CodigosVerificacion => Set<CodigoVerificacion>();
 
+        public DbSet<Evento> Eventos => Set<Evento>();
+        public DbSet<EventoInscripcion> EventoInscripciones => Set<EventoInscripcion>();
+        public DbSet<EventoResultado> EventoResultados => Set<EventoResultado>();
+        public DbSet<TipoEvento> TiposEvento => Set<TipoEvento>();
+        public DbSet<EstadoEvento> EstadosEvento => Set<EstadoEvento>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -82,6 +88,15 @@ namespace ClubCanotajeAPI.Context
             modelBuilder.Entity<Membresia>().Ignore(m => m.EstaVigente);
             modelBuilder.Entity<Salida>().Ignore(s => s.DuracionRealMin);
             modelBuilder.Entity<CodigoVerificacion>().Ignore(cv => cv.EstaVigente);
+
+            // Evento
+
+            modelBuilder.Entity<EventoInscripcion>()
+                .HasOne(ei => ei.Resultado)
+                .WithOne(er => er.Inscripcion)
+                .HasForeignKey<EventoResultado>(er => er.IdInscripcion)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

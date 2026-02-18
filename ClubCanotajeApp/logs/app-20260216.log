@@ -12,3 +12,17 @@
 2026-02-16 23:00:20.662 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7001/_vs/browserLink - 200 null text/javascript; charset=UTF-8 169.4502ms
 2026-02-16 23:00:20.684 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7001/swagger/v1/swagger.json - null null
 2026-02-16 23:00:20.706 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7001/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 21.8349ms
+2026-02-16 23:13:41.997 -03:00 [INF] User profile is available. Using 'C:\Users\Dieg0\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-02-16 23:13:42.224 -03:00 [INF] Now listening on: https://localhost:7001
+2026-02-16 23:13:42.226 -03:00 [INF] Now listening on: http://localhost:5205
+2026-02-16 23:13:42.278 -03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-16 23:13:42.278 -03:00 [INF] Hosting environment: Development
+2026-02-16 23:13:42.279 -03:00 [INF] Content root path: C:\Users\Dieg0\OneDrive\Documentos\ClubCanotaje\ClubCanotajeApp
+2026-02-16 23:13:43.007 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7001/swagger/index.html - null null
+2026-02-16 23:13:43.147 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7001/swagger/index.html - 200 null text/html;charset=utf-8 142.6364ms
+2026-02-16 23:13:43.150 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7001/_vs/browserLink - null null
+2026-02-16 23:13:43.150 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7001/_framework/aspnetcore-browser-refresh.js - null null
+2026-02-16 23:13:43.160 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7001/_framework/aspnetcore-browser-refresh.js - 200 16515 application/javascript; charset=utf-8 10.0236ms
+2026-02-16 23:13:43.218 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7001/_vs/browserLink - 200 null text/javascript; charset=UTF-8 68.0791ms
+2026-02-16 23:13:43.258 -03:00 [INF] Request starting HTTP/2 GET https://localhost:7001/swagger/v1/swagger.json - null null
+2026-02-16 23:13:43.275 -03:00 [INF] Request finished HTTP/2 GET https://localhost:7001/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 17.6568ms

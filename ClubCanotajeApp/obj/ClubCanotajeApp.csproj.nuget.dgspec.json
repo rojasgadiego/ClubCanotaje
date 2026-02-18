@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Dieg0\\source\\repos\\ClubCanotajeApp\\ClubCanotajeApp\\ClubCanotajeApp.csproj": {}
+    "C:\\Users\\Dieg0\\OneDrive\\Documentos\\ClubCanotaje\\ClubCanotajeApp\\ClubCanotajeApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Dieg0\\source\\repos\\ClubCanotajeApp\\ClubCanotajeApp\\ClubCanotajeApp.csproj": {
+    "C:\\Users\\Dieg0\\OneDrive\\Documentos\\ClubCanotaje\\ClubCanotajeApp\\ClubCanotajeApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dieg0\\source\\repos\\ClubCanotajeApp\\ClubCanotajeApp\\ClubCanotajeApp.csproj",
+        "projectUniqueName": "C:\\Users\\Dieg0\\OneDrive\\Documentos\\ClubCanotaje\\ClubCanotajeApp\\ClubCanotajeApp.csproj",
         "projectName": "ClubCanotajeApp",
-        "projectPath": "C:\\Users\\Dieg0\\source\\repos\\ClubCanotajeApp\\ClubCanotajeApp\\ClubCanotajeApp.csproj",
+        "projectPath": "C:\\Users\\Dieg0\\OneDrive\\Documentos\\ClubCanotaje\\ClubCanotajeApp\\ClubCanotajeApp.csproj",
         "packagesPath": "C:\\Users\\Dieg0\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dieg0\\source\\repos\\ClubCanotajeApp\\ClubCanotajeApp\\obj\\",
+        "outputPath": "C:\\Users\\Dieg0\\OneDrive\\Documentos\\ClubCanotaje\\ClubCanotajeApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

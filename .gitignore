@@ -1,0 +1,37 @@
+﻿################################################################################
+# Este archivo .gitignore ha sido creado automáticamente por Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/ClubCanotaje/FileContentIndex
+
+
+## Archivos generados por compilación
+bin/
+obj/
+
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Rider
+.idea/
+
+## VS Code
+.vscode/
+
+## Archivos de sistema
+.DS_Store
+Thumbs.db
+
+## Archivos de publicación
+publish/
+*.publishsettings
+
+## Logs
+*.log
+
+## Archivos de configuración local
+appsettings.Development.json

@@ -1,6 +1,7 @@
 ﻿using ClubCanotajeAPI.Context;
 using ClubCanotajeAPI.Middleware;
 using ClubCanotajeAPI.Repositories.CanoaRepository;
+using ClubCanotajeAPI.Repositories.EventoRepository;
 using ClubCanotajeAPI.Repositories.ImplementoRepository;
 using ClubCanotajeAPI.Repositories.MembresiaRepository;
 using ClubCanotajeAPI.Repositories.RemadorRepository;
@@ -37,7 +38,8 @@ builder.Services.AddScoped<SalidaRepository>();
 builder.Services.AddScoped<ImplementoRepository>();
 builder.Services.AddScoped<MembresiaRepository>();
 builder.Services.AddScoped<UsuarioRepository>();
-builder.Services.AddScoped<VerificacionRepository>(); 
+builder.Services.AddScoped<VerificacionRepository>();
+builder.Services.AddScoped<EventoRepository>();
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<RemadorService>();
@@ -46,6 +48,8 @@ builder.Services.AddScoped<SalidaService>();
 builder.Services.AddScoped<ImplementoService>();
 builder.Services.AddScoped<MembresiaService>();
 builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<EventoService>();
+
 
 
 var jwt = builder.Configuration.GetSection("JwtSettings");
