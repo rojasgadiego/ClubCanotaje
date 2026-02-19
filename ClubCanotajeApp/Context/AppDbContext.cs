@@ -41,15 +41,33 @@ namespace ClubCanotajeAPI.Context
         // ── Verificación de email ─────────────────────────────────
         public DbSet<CodigoVerificacion> CodigosVerificacion => Set<CodigoVerificacion>();
 
+        // ── Eventos / Torneos ─────────────────────────────────────
         public DbSet<Evento> Eventos => Set<Evento>();
         public DbSet<EventoInscripcion> EventoInscripciones => Set<EventoInscripcion>();
         public DbSet<EventoResultado> EventoResultados => Set<EventoResultado>();
         public DbSet<TipoEvento> TiposEvento => Set<TipoEvento>();
         public DbSet<EstadoEvento> EstadosEvento => Set<EstadoEvento>();
 
+        // ── Brackets ──────────────────────────────────────────────
+        //public DbSet<EventoRonda> EventoRondas => Set<EventoRonda>();
+        //public DbSet<EventoEnfrentamiento> EventoEnfrentamientos => Set<EventoEnfrentamiento>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // ═══ CONVERSIÓN AUTOMÁTICA datetime2 → datetime ═══════
+            //foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            //{
+            //    foreach (var property in entityType.GetProperties())
+            //    {
+            //        if (property.ClrType == typeof(DateTime) ||
+            //            property.ClrType == typeof(DateTime?))
+            //        {
+            //            property.SetColumnType("datetime");
+            //        }
+            //    }
+            //}
 
             // ── Índices únicos ────────────────────────────────────
             modelBuilder.Entity<Remador>()
@@ -64,6 +82,15 @@ namespace ClubCanotajeAPI.Context
                 .HasIndex(sp => new { sp.IdSalida, sp.IdRemador }).IsUnique();
             modelBuilder.Entity<Cuota>()
                 .HasIndex(c => new { c.IdMembresia, c.Periodo }).IsUnique();
+            modelBuilder.Entity<UsuarioSistema>()
+                .HasIndex(u => u.IdRemador)
+                .IsUnique()
+                .HasFilter("[id_remador] IS NOT NULL");
+
+            modelBuilder.Entity<UsuarioSistema>()
+                .HasIndex(u => u.IdInstructor)
+                .IsUnique()
+                .HasFilter("[id_instructor] IS NOT NULL");
 
             // ── Índices para verificación ────────────────────────
             modelBuilder.Entity<CodigoVerificacion>()
@@ -88,15 +115,22 @@ namespace ClubCanotajeAPI.Context
             modelBuilder.Entity<Membresia>().Ignore(m => m.EstaVigente);
             modelBuilder.Entity<Salida>().Ignore(s => s.DuracionRealMin);
             modelBuilder.Entity<CodigoVerificacion>().Ignore(cv => cv.EstaVigente);
+            //modelBuilder.Entity<EventoEnfrentamiento>().Ignore(e => e.NombreParticipante1);
+            //modelBuilder.Entity<EventoEnfrentamiento>().Ignore(e => e.NombreParticipante2);
 
-            // Evento
-
+            // ── Relaciones de Evento ──────────────────────────────
             modelBuilder.Entity<EventoInscripcion>()
                 .HasOne(ei => ei.Resultado)
                 .WithOne(er => er.Inscripcion)
                 .HasForeignKey<EventoResultado>(er => er.IdInscripcion)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Restricción: O inscribe equipo O remador, no ambos
+            modelBuilder.Entity<EventoInscripcion>()
+                .HasCheckConstraint(
+                    "CHK_EventoInsc_Part",
+                    "(id_equipo IS NOT NULL AND id_remador IS NULL) OR (id_equipo IS NULL AND id_remador IS NOT NULL)"
+                );
         }
     }
 }

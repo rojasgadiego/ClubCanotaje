@@ -59,10 +59,9 @@ namespace ClubCanotajeAPI.Services
                 new LoginResponse(usuario.Id, token, expira, usuario.Username, nombre, usuario.Rol.Nombre));
         }
 
-        // ── Registro público ──────────────────────────────────────
+        // Registro público
 
-        public async Task<ApiResponse<RegistrarUsuarioResponse>> RegistroPublicoAsync(
-            RegistroPublicoRequest dto)
+        public async Task<ApiResponse<RegistrarUsuarioResponse>> RegistroPublicoAsync(RegistroPublicoRequest dto)
         {
             if (await _usuarioRepo.ExisteUsernameAsync(dto.Username))
                 return ApiResponse<RegistrarUsuarioResponse>.Fail(
@@ -124,10 +123,9 @@ namespace ClubCanotajeAPI.Services
                 "Registro exitoso. Revisa tu email para verificar tu cuenta.");
         }
 
-        // ── Registro admin ────────────────────────────────────────
+        // Registro admin
 
-        public async Task<ApiResponse<RegistrarUsuarioResponse>> RegistroAdminAsync(
-            RegistroAdminRequest dto)
+        public async Task<ApiResponse<RegistrarUsuarioResponse>> RegistroAdminAsync(RegistroAdminRequest dto)
         {
             if (await _usuarioRepo.ExisteUsernameAsync(dto.Username))
                 return ApiResponse<RegistrarUsuarioResponse>.Fail(
@@ -154,7 +152,7 @@ namespace ClubCanotajeAPI.Services
                 $"Usuario '{creado.Username}' creado con rol '{rol.Nombre}'.");
         }
 
-        // ── Verificar email ───────────────────────────────────────
+        // Verificar email
 
         public async Task<ApiResponse> VerificarEmailAsync(string email, string codigo)
         {
@@ -177,7 +175,7 @@ namespace ClubCanotajeAPI.Services
             return ApiResponse.Ok("Email verificado correctamente. Ya puedes iniciar sesión.");
         }
 
-        // ── Reenviar código ───────────────────────────────────────
+        // Reenviar código
 
         public async Task<ApiResponse> ReenviarCodigoAsync(string email)
         {
@@ -201,7 +199,7 @@ namespace ClubCanotajeAPI.Services
             return ApiResponse.Ok("Código reenviado. Revisa tu email.");
         }
 
-        // ── Recuperar contraseña ──────────────────────────────────
+        // Recuperar contraseña
 
         public async Task<ApiResponse> SolicitarResetPasswordAsync(string email)
         {
@@ -242,7 +240,7 @@ namespace ClubCanotajeAPI.Services
             return ApiResponse.Ok("Contraseña actualizada correctamente.");
         }
 
-        // ── Listar roles ──────────────────────────────────────────
+        // Listar roles
 
         public async Task<ApiResponse<List<RolDto>>> GetRolesAsync()
         {
@@ -251,7 +249,7 @@ namespace ClubCanotajeAPI.Services
                 roles.Select(r => new RolDto(r.Id, r.Nombre)).ToList());
         }
 
-        // ── Generar JWT ───────────────────────────────────────────
+        // Generar JWT
 
         private string GenerarToken(UsuarioSistema usuario)
         {

@@ -20,7 +20,7 @@ namespace ClubCanotajeAPI.Models.Entities
         [ForeignKey("IdRemador")] public Remador? Remador { get; set; }
         [ForeignKey("IdInstructor")] public Instructor? Instructor { get; set; }
         [Column("email_verificado")] public bool EmailVerificado { get; set; }
-        [Column("fecha_verificacion")] public DateTime FechaVerificacion { get; set; }
+        [Column("fecha_verificacion")] public DateTime? FechaVerificacion { get; set; }
         
     }
 }

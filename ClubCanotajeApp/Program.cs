@@ -49,7 +49,7 @@ builder.Services.AddScoped<ImplementoService>();
 builder.Services.AddScoped<MembresiaService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<EventoService>();
-
+builder.Services.AddScoped<TransBankService>();
 
 
 var jwt = builder.Configuration.GetSection("JwtSettings");

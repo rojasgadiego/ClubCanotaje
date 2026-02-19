@@ -15,7 +15,7 @@ namespace ClubCanotajeAPI.Services
         {
             _apiKey = config["SendGrid:ApiKey"]!;
             _fromEmail = config["SendGrid:FromEmail"]!;
-            _fromName = config["SendGrid:FromName"] ?? "Club Canotaje";
+            _fromName = config["SendGrid:FromName"] ?? "Club Canotaje Manuvas'a";
         }
 
         public async Task<bool> EnviarCodigoVerificacionAsync(
