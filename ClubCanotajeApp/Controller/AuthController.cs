@@ -11,6 +11,7 @@ namespace ClubCanotajeAPI.Controller
     public class AuthController : ControllerBase
     {
         private readonly AuthService _service;
+
         public AuthController(AuthService service) => _service = service;
 
         /// <summary>Login → devuelve JWT</summary>
@@ -19,7 +20,7 @@ namespace ClubCanotajeAPI.Controller
         public async Task<IActionResult> Login([FromBody] LoginRequest dto)
         {
             var result = await _service.LoginAsync(dto);
-            return result.Success ? Ok(result) : Unauthorized(result);
+            return Ok(result);
         }
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace ClubCanotajeAPI.Controller
         public async Task<IActionResult> Registro([FromBody] RegistroPublicoRequest dto)
         {
             var result = await _service.RegistroPublicoAsync(dto);
-            return result.Success ? Ok(result) : BadRequest(result);
+            return Ok(result);
         }
 
         /// <summary>
@@ -43,25 +44,16 @@ namespace ClubCanotajeAPI.Controller
         public async Task<IActionResult> RegistroAdmin([FromBody] RegistroAdminRequest dto)
         {
             var result = await _service.RegistroAdminAsync(dto);
-            return result.Success ? Ok(result) : BadRequest(result);
+            return Ok(result);
         }
-
-        /// <summary>Lista de roles disponibles (para el formulario de registro admin)</summary>
-        //[HttpGet("roles")]
-        //[Authorize(Roles = "Administrador")]
-        //public async Task<IActionResult> GetRoles()
-        //{
-        //    var result = await _service.GetRolesAsync();
-        //    return Ok(result);
-        //}
 
         /// <summary>Verificar email con código de 6 dígitos</summary>
         [HttpPost("verificar-email")]
         [AllowAnonymous]
         public async Task<IActionResult> VerificarEmail([FromBody] VerificarEmailRequest dto)
         {
-            var result = await _service.VerificarEmailAsync(dto.Email, dto.Codigo);
-            return result.Success ? Ok(result) : BadRequest(result);
+            await _service.VerificarEmailAsync(dto.Email, dto.Codigo);
+            return Ok();
         }
 
         /// <summary>Reenviar código de verificación</summary>
@@ -69,8 +61,8 @@ namespace ClubCanotajeAPI.Controller
         [AllowAnonymous]
         public async Task<IActionResult> ReenviarCodigo([FromBody] ReenviarCodigoRequest dto)
         {
-            var result = await _service.ReenviarCodigoAsync(dto.Email);
-            return Ok(result);
+            await _service.ReenviarCodigoAsync(dto.Email);
+            return Ok();
         }
 
         /// <summary>Solicitar recuperación de contraseña</summary>
@@ -78,8 +70,8 @@ namespace ClubCanotajeAPI.Controller
         [AllowAnonymous]
         public async Task<IActionResult> RecuperarPassword([FromBody] RecuperarPasswordRequest dto)
         {
-            var result = await _service.SolicitarResetPasswordAsync(dto.Email);
-            return Ok(result); // Siempre 200 para no revelar si existe el email
+            await _service.SolicitarResetPasswordAsync(dto.Email);
+            return Ok();
         }
 
         /// <summary>Restablecer contraseña con código</summary>
@@ -87,8 +79,8 @@ namespace ClubCanotajeAPI.Controller
         [AllowAnonymous]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest dto)
         {
-            var result = await _service.ResetPasswordAsync(dto.Email, dto.Codigo, dto.NuevaPassword);
-            return result.Success ? Ok(result) : BadRequest(result);
+            await _service.ResetPasswordAsync(dto.Email, dto.Codigo, dto.NuevaPassword);
+            return Ok();
         }
     }
 }

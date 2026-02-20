@@ -856,5 +856,37 @@
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.TransBankController",
+    "Method": "confirmTransaction",
+    "RelativePath": "api/TransBank/confirmarTransaccion",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Transbank.Request.ConfirmTransaction",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ClubCanotajeAPI.Controller.TransBankController",
+    "Method": "createTransaction",
+    "RelativePath": "api/TransBank/crearTransaccion",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "ClubCanotajeAPI.Models.Dtos.Transbank.Request.CreateTransaction",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

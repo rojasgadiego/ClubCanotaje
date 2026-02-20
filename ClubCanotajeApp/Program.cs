@@ -1,4 +1,6 @@
 ﻿using ClubCanotajeAPI.Context;
+using ClubCanotajeAPI.Helper;
+using ClubCanotajeAPI.Helper.Interface;
 using ClubCanotajeAPI.Middleware;
 using ClubCanotajeAPI.Repositories.CanoaRepository;
 using ClubCanotajeAPI.Repositories.EventoRepository;
@@ -50,6 +52,8 @@ builder.Services.AddScoped<MembresiaService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<EventoService>();
 builder.Services.AddScoped<TransBankService>();
+
+builder.Services.AddSingleton<IErrorResponseBuilder, ErrorResponseBuilder>();
 
 
 var jwt = builder.Configuration.GetSection("JwtSettings");
@@ -120,7 +124,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors("Frontend");
 app.UseSerilogRequestLogging();

@@ -1,5 +1,5 @@
-﻿using ClubCanotajeAPI.Models.Dtos.Auth;
-using ClubCanotajeAPI.Models.Dtos.Common;
+﻿using ClubCanotajeAPI.Exceptions;
+using ClubCanotajeAPI.Models.Dtos.Auth;
 using ClubCanotajeAPI.Models.Entities;
 using ClubCanotajeAPI.Repositories.Usuario;
 using ClubCanotajeAPI.Repositories.Verificacion;
@@ -16,34 +16,37 @@ namespace ClubCanotajeAPI.Services
         private readonly VerificacionRepository _verificacionRepo;
         private readonly EmailService _emailService;
         private readonly IConfiguration _config;
+        private readonly ILogger<AuthService> _logger;
 
         public AuthService(
             UsuarioRepository usuarioRepo,
             VerificacionRepository verificacionRepo,
             EmailService emailService,
-            IConfiguration config)
+            IConfiguration config,
+            ILogger<AuthService> logger)
         {
             _usuarioRepo = usuarioRepo;
             _verificacionRepo = verificacionRepo;
             _emailService = emailService;
             _config = config;
+            _logger = logger;
         }
 
         // ── Login ─────────────────────────────────────────────────
 
-        public async Task<ApiResponse<LoginResponse>> LoginAsync(LoginRequest dto)
+        public async Task<LoginResponse> LoginAsync(LoginRequest dto)
         {
             var usuario = await _usuarioRepo.GetByUsernameAsync(dto.Username);
 
             if (usuario is null || !BCrypt.Net.BCrypt.Verify(dto.Password, usuario.PasswordHash))
-                return ApiResponse<LoginResponse>.Fail("Usuario o contraseña incorrectos.");
+                throw new DataSourceException("Usuario o contraseña incorrectos.", "001");
 
             if (!usuario.Activo)
-                return ApiResponse<LoginResponse>.Fail("Usuario inactivo. Contacta al administrador.");
+                throw new DataSourceException("Usuario inactivo. Contacta al administrador.", "002");
 
             if (!usuario.EmailVerificado)
-                return ApiResponse<LoginResponse>.Fail(
-                    "Debes verificar tu email antes de iniciar sesión. Revisa tu correo.");
+                throw new DataSourceException(
+                    "Debes verificar tu email antes de iniciar sesión. Revisa tu correo.", "003");
 
             await _usuarioRepo.RegistrarAccesoAsync(usuario.Id);
 
@@ -55,30 +58,24 @@ namespace ClubCanotajeAPI.Services
             var expira = DateTime.UtcNow.AddMinutes(
                 _config.GetValue<int>("JwtSettings:ExpirationMinutes", 60));
 
-            return ApiResponse<LoginResponse>.Ok(
-                new LoginResponse(usuario.Id, token, expira, usuario.Username, nombre, usuario.Rol.Nombre));
+            return new LoginResponse(usuario.Id, token, expira, usuario.Username, nombre, usuario.Rol.Nombre);
         }
 
-        // Registro público
+        // ── Registro público ──────────────────────────────────────
 
-        public async Task<ApiResponse<RegistrarUsuarioResponse>> RegistroPublicoAsync(RegistroPublicoRequest dto)
+        public async Task<RegistrarUsuarioResponse> RegistroPublicoAsync(RegistroPublicoRequest dto)
         {
             if (await _usuarioRepo.ExisteUsernameAsync(dto.Username))
-                return ApiResponse<RegistrarUsuarioResponse>.Fail(
-                    $"El username '{dto.Username}' ya está en uso.");
+                throw new DataSourceException($"El username '{dto.Username}' ya está en uso.", "004");
 
             if (await _usuarioRepo.ExisteRutAsync(dto.Rut))
-                return ApiResponse<RegistrarUsuarioResponse>.Fail(
-                    "Ya existe un remador registrado con ese RUT.");
+                throw new DataSourceException("Ya existe un remador registrado con ese RUT.", "005");
 
             if (await _usuarioRepo.ExisteEmailRemadorAsync(dto.Email))
-                return ApiResponse<RegistrarUsuarioResponse>.Fail(
-                    "Ya existe un remador registrado con ese email.");
+                throw new DataSourceException("Ya existe un remador registrado con ese email.", "006");
 
-            var rol = await _usuarioRepo.GetRolByNombreAsync("Remador");
-            if (rol is null)
-                return ApiResponse<RegistrarUsuarioResponse>.Fail(
-                    "Error de configuración: rol 'Remador' no encontrado.");
+            var rol = await _usuarioRepo.GetRolByNombreAsync("Remador")
+                ?? throw new ModelException("Error de configuración: rol 'Remador' no encontrado.", "001");
 
             var idCategoria = await _usuarioRepo.GetCategoriaDefaultAsync();
             var idEstado = await _usuarioRepo.GetEstadoRemadorActivoAsync();
@@ -111,29 +108,21 @@ namespace ClubCanotajeAPI.Services
 
             var creado = await _usuarioRepo.CrearConRemadorAsync(remador, usuario);
 
-            // Generar y enviar código
-            var codigo = await _verificacionRepo.CrearCodigoAsync(
-                remador.Email, TipoVerificacion.Registro);
+            // Email fuera de la transacción — fallo no revierte el registro
+            await EnviarCodigoAsync(remador.Email, TipoVerificacion.Registro, creado.Id);
 
-            await _emailService.EnviarCodigoVerificacionAsync(
-                remador.Email, codigo.Codigo, TipoVerificacion.Registro);
-
-            return ApiResponse<RegistrarUsuarioResponse>.Ok(
-                new RegistrarUsuarioResponse(creado.Id, creado.Username, rol.Nombre),
-                "Registro exitoso. Revisa tu email para verificar tu cuenta.");
+            return new RegistrarUsuarioResponse(creado.Id, creado.Username, rol.Nombre);
         }
 
-        // Registro admin
+        // ── Registro admin ────────────────────────────────────────
 
-        public async Task<ApiResponse<RegistrarUsuarioResponse>> RegistroAdminAsync(RegistroAdminRequest dto)
+        public async Task<RegistrarUsuarioResponse> RegistroAdminAsync(RegistroAdminRequest dto)
         {
             if (await _usuarioRepo.ExisteUsernameAsync(dto.Username))
-                return ApiResponse<RegistrarUsuarioResponse>.Fail(
-                    $"El username '{dto.Username}' ya está en uso.");
+                throw new DataSourceException($"El username '{dto.Username}' ya está en uso.", "004");
 
-            var rol = await _usuarioRepo.GetRolByIdAsync(dto.IdRol);
-            if (rol is null)
-                return ApiResponse<RegistrarUsuarioResponse>.Fail("El rol especificado no existe.");
+            var rol = await _usuarioRepo.GetRolByIdAsync(dto.IdRol)
+                ?? throw new DataSourceException("El rol especificado no existe.", "007");
 
             var usuario = new UsuarioSistema
             {
@@ -147,114 +136,106 @@ namespace ClubCanotajeAPI.Services
 
             var creado = await _usuarioRepo.CrearAsync(usuario);
 
-            return ApiResponse<RegistrarUsuarioResponse>.Ok(
-                new RegistrarUsuarioResponse(creado.Id, creado.Username, rol.Nombre),
-                $"Usuario '{creado.Username}' creado con rol '{rol.Nombre}'.");
+            return new RegistrarUsuarioResponse(creado.Id, creado.Username, rol.Nombre);
         }
 
-        // Verificar email
+        // ── Verificar email ───────────────────────────────────────
 
-        public async Task<ApiResponse> VerificarEmailAsync(string email, string codigo)
+        public async Task VerificarEmailAsync(string email, string codigo)
         {
-            var verif = await _verificacionRepo.ValidarCodigoAsync(
-                email, codigo, TipoVerificacion.Registro);
+            var verif = await _verificacionRepo.ValidarCodigoAsync(email, codigo, TipoVerificacion.Registro)
+                ?? throw new DataSourceException("Código inválido o expirado. Solicita uno nuevo.", "008");
 
-            if (verif is null)
-                return ApiResponse.Fail("Código inválido o expirado. Solicita uno nuevo.");
-
-            var usuario = await _usuarioRepo.GetByEmailRemadorAsync(email);
-            if (usuario is null)
-                return ApiResponse.Fail("Usuario no encontrado.");
+            var usuario = await _usuarioRepo.GetByEmailRemadorAsync(email)
+                ?? throw new ModelException("Usuario no encontrado.", "002");
 
             if (usuario.EmailVerificado)
-                return ApiResponse.Fail("Este email ya fue verificado.");
+                throw new DataSourceException("Este email ya fue verificado.", "009");
 
             await _usuarioRepo.ActivarUsuarioAsync(usuario);
             await _verificacionRepo.MarcarComoUsadoAsync(verif);
-
-            return ApiResponse.Ok("Email verificado correctamente. Ya puedes iniciar sesión.");
         }
 
-        // Reenviar código
+        // ── Reenviar código ───────────────────────────────────────
 
-        public async Task<ApiResponse> ReenviarCodigoAsync(string email)
+        public async Task ReenviarCodigoAsync(string email)
         {
-            var remador = await _usuarioRepo.GetRemadorByEmailAsync(email);
-            if (remador is null)
-                return ApiResponse.Fail("Email no registrado.");
+            var remador = await _usuarioRepo.GetRemadorByEmailAsync(email)
+                ?? throw new DataSourceException("Email no registrado.", "010");
 
-            var usuario = await _usuarioRepo.GetByEmailRemadorAsync(email);
-            if (usuario is null)
-                return ApiResponse.Fail("Usuario no encontrado.");
+            var usuario = await _usuarioRepo.GetByEmailRemadorAsync(email)
+                ?? throw new ModelException("Usuario no encontrado.", "002");
 
             if (usuario.EmailVerificado)
-                return ApiResponse.Fail("Este email ya está verificado.");
+                throw new DataSourceException("Este email ya está verificado.", "009");
 
-            var codigo = await _verificacionRepo.CrearCodigoAsync(
-                email, TipoVerificacion.Registro);
-
-            await _emailService.EnviarCodigoVerificacionAsync(
-                email, codigo.Codigo, TipoVerificacion.Registro);
-
-            return ApiResponse.Ok("Código reenviado. Revisa tu email.");
+            await EnviarCodigoAsync(email, TipoVerificacion.Registro, usuario.Id);
         }
 
-        // Recuperar contraseña
+        // ── Recuperar contraseña ──────────────────────────────────
 
-        public async Task<ApiResponse> SolicitarResetPasswordAsync(string email)
+        public async Task SolicitarResetPasswordAsync(string email)
         {
+            // Siempre retorna sin error para no revelar si el email existe
             var remador = await _usuarioRepo.GetRemadorByEmailAsync(email);
+            if (remador is null) return;
 
-            if (remador is null)
-                return ApiResponse.Ok(
-                    "Si el email está registrado, recibirás un código de recuperación.");
-
-            var codigo = await _verificacionRepo.CrearCodigoAsync(
-                email, TipoVerificacion.ResetPassword, 30);
-
-            await _emailService.EnviarCodigoVerificacionAsync(
-                email, codigo.Codigo, TipoVerificacion.ResetPassword);
-
-            return ApiResponse.Ok(
-                "Si el email está registrado, recibirás un código de recuperación.");
+            await EnviarCodigoAsync(email, TipoVerificacion.ResetPassword, minutos: 30);
         }
 
-        public async Task<ApiResponse> ResetPasswordAsync(
-            string email, string codigo, string nuevaPassword)
+        public async Task ResetPasswordAsync(string email, string codigo, string nuevaPassword)
         {
-            var verif = await _verificacionRepo.ValidarCodigoAsync(
-                email, codigo, TipoVerificacion.ResetPassword);
+            var verif = await _verificacionRepo.ValidarCodigoAsync(email, codigo, TipoVerificacion.ResetPassword)
+                ?? throw new DataSourceException("Código inválido o expirado.", "008");
 
-            if (verif is null)
-                return ApiResponse.Fail("Código inválido o expirado.");
-
-            var usuario = await _usuarioRepo.GetByEmailRemadorAsync(email);
-            if (usuario is null)
-                return ApiResponse.Fail("Usuario no encontrado.");
+            var usuario = await _usuarioRepo.GetByEmailRemadorAsync(email)
+                ?? throw new ModelException("Usuario no encontrado.", "002");
 
             var nuevoHash = BCrypt.Net.BCrypt.HashPassword(nuevaPassword);
             await _usuarioRepo.CambiarPasswordAsync(usuario, nuevoHash);
-
             await _verificacionRepo.MarcarComoUsadoAsync(verif);
-
-            return ApiResponse.Ok("Contraseña actualizada correctamente.");
         }
 
-        // Listar roles
+        // ── Roles ─────────────────────────────────────────────────
 
-        public async Task<ApiResponse<List<RolDto>>> GetRolesAsync()
+        public async Task<List<RolDto>> GetRolesAsync()
         {
             var roles = await _usuarioRepo.GetRolesAsync();
-            return ApiResponse<List<RolDto>>.Ok(
-                roles.Select(r => new RolDto(r.Id, r.Nombre)).ToList());
+            return roles.Select(r => new RolDto(r.Id, r.Nombre)).ToList();
         }
 
-        // Generar JWT
+        // ── Helpers privados ──────────────────────────────────────
+
+        /// <summary>
+        /// Genera y envía un código de verificación por email.
+        /// Si el envío falla, loguea el error y lanza ClientException.
+        /// El usuario ya quedó creado — esto NO revierte la BD.
+        /// </summary>
+        private async Task EnviarCodigoAsync(
+            string email,
+            string tipo,
+            int? idUsuario = null,
+            int minutos = 15)
+        {
+            try
+            {
+                var codigo = await _verificacionRepo.CrearCodigoAsync(email, tipo, minutos);
+                await _emailService.EnviarCodigoVerificacionAsync(email, codigo.Codigo, tipo);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "Fallo al enviar email de verificación. Tipo: {Tipo} | Email: {Email} | UsuarioId: {Id}",
+                    tipo, email, idUsuario);
+
+                throw new ClientException(
+                    "No se pudo enviar el email de verificación. Intenta reenviar el código.", "001");
+            }
+        }
 
         private string GenerarToken(UsuarioSistema usuario)
         {
-            var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_config["JwtSettings:SecretKey"]!));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:SecretKey"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expira = DateTime.UtcNow.AddMinutes(
                 _config.GetValue<int>("JwtSettings:ExpirationMinutes", 60));
@@ -264,7 +245,7 @@ namespace ClubCanotajeAPI.Services
                 new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
                 new Claim(ClaimTypes.Name,           usuario.Username),
                 new Claim(ClaimTypes.Role,           usuario.Rol.Nombre),
-                new Claim("id_remador",              usuario.Remador?.ToString() ?? "")
+                new Claim("id_remador",              usuario.Remador?.Id.ToString() ?? "")
             };
 
             var token = new JwtSecurityToken(
