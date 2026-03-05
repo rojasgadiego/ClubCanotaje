@@ -33,11 +33,7 @@
         int IdRol        // permite asignar cualquier rol
     );
 
-    public record RegistrarUsuarioResponse(
-        int Id,
-        string Username,
-        string Rol
-    );
+    public record RegistrarUsuarioResponse( string Username );
 
     public record RolDto(int Id, string Nombre);
 }

@@ -32,7 +32,7 @@ namespace ClubCanotajeAPI.Services
             _logger = logger;
         }
 
-        // ── Login ─────────────────────────────────────────────────
+        // Login
 
         public async Task<LoginResponse> LoginAsync(LoginRequest dto)
         {
@@ -61,7 +61,7 @@ namespace ClubCanotajeAPI.Services
             return new LoginResponse(usuario.Id, token, expira, usuario.Username, nombre, usuario.Rol.Nombre);
         }
 
-        // ── Registro público ──────────────────────────────────────
+        // Registro público
 
         public async Task<RegistrarUsuarioResponse> RegistroPublicoAsync(RegistroPublicoRequest dto)
         {
@@ -111,10 +111,10 @@ namespace ClubCanotajeAPI.Services
             // Email fuera de la transacción — fallo no revierte el registro
             await EnviarCodigoAsync(remador.Email, TipoVerificacion.Registro, creado.Id);
 
-            return new RegistrarUsuarioResponse(creado.Id, creado.Username, rol.Nombre);
+            return new RegistrarUsuarioResponse(creado.Username);
         }
 
-        // ── Registro admin ────────────────────────────────────────
+        // Registro admin
 
         public async Task<RegistrarUsuarioResponse> RegistroAdminAsync(RegistroAdminRequest dto)
         {
@@ -136,10 +136,10 @@ namespace ClubCanotajeAPI.Services
 
             var creado = await _usuarioRepo.CrearAsync(usuario);
 
-            return new RegistrarUsuarioResponse(creado.Id, creado.Username, rol.Nombre);
+            return new RegistrarUsuarioResponse(creado.Username);
         }
 
-        // ── Verificar email ───────────────────────────────────────
+        // Verificar email
 
         public async Task VerificarEmailAsync(string email, string codigo)
         {
@@ -156,7 +156,7 @@ namespace ClubCanotajeAPI.Services
             await _verificacionRepo.MarcarComoUsadoAsync(verif);
         }
 
-        // ── Reenviar código ───────────────────────────────────────
+       // Reenviar código 
 
         public async Task ReenviarCodigoAsync(string email)
         {
@@ -172,7 +172,7 @@ namespace ClubCanotajeAPI.Services
             await EnviarCodigoAsync(email, TipoVerificacion.Registro, usuario.Id);
         }
 
-        // ── Recuperar contraseña ──────────────────────────────────
+        // Recuperar contraseña
 
         public async Task SolicitarResetPasswordAsync(string email)
         {
@@ -196,7 +196,7 @@ namespace ClubCanotajeAPI.Services
             await _verificacionRepo.MarcarComoUsadoAsync(verif);
         }
 
-        // ── Roles ─────────────────────────────────────────────────
+        // Roles
 
         public async Task<List<RolDto>> GetRolesAsync()
         {
@@ -204,7 +204,7 @@ namespace ClubCanotajeAPI.Services
             return roles.Select(r => new RolDto(r.Id, r.Nombre)).ToList();
         }
 
-        // ── Helpers privados ──────────────────────────────────────
+        // Helpers privados
 
         /// <summary>
         /// Genera y envía un código de verificación por email.

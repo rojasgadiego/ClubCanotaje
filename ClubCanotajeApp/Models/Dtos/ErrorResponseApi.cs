@@ -5,6 +5,7 @@
     /// </summary>
     public class ErrorResponseApi
     {
+        public bool Success { get; set; } = false;
         public DetailResponse Error { get; set; } = null!;
     }
 
