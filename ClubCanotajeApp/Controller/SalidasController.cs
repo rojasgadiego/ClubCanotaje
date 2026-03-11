@@ -11,8 +11,8 @@ namespace ClubCanotajeAPI.Controller
     [Authorize]
     public class SalidasController : ControllerBase
     {
-        private readonly SalidaService _service;
-        public SalidasController(SalidaService service) => _service = service;
+        private readonly ISalidaService _service;
+        public SalidasController(ISalidaService service) => _service = service;
 
         /// <summary>Agenda: próximas reservas pendientes</summary>
         [HttpGet("proximas")]

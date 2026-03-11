@@ -3,9 +3,6 @@
     public record LoginRequest(string Username, string Password);
 
     public record LoginResponse(
-        int Id,
-        string Token,
-        DateTime Expira,
         string Username,
         string NombreCompleto,
         string Rol

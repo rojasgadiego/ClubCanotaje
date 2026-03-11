@@ -11,23 +11,38 @@ namespace ClubCanotajeAPI.Controller
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly AuthService _service;
+        private readonly IAuthService _service;
 
-        public AuthController(AuthService service) => _service = service;
+        public AuthController(IAuthService service) => _service = service;
 
-        /// <summary>Login → devuelve JWT</summary>
+        /// <summary>Login → guarda JWT en cookie HttpOnly</summary>
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginRequest dto)
         {
-            var result = await _service.LoginAsync(dto);
+            var (result, token) = await _service.LoginAsync(dto);
+
+            Response.Cookies.Append("jwt", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None, //en dev
+                Expires = DateTimeOffset.UtcNow.AddMinutes(60)
+            });
+
             return Ok(ApiResponse<LoginResponse>.Ok(result, "Inicio de sesión exitoso."));
         }
 
-        /// <summary>
-        /// Registro público — cualquier persona puede registrarse.
-        /// Crea automáticamente un Remador + Usuario con rol Remador.
-        /// </summary>
+        /// <summary>Logout → elimina cookie JWT</summary>
+        [HttpPost("logout")]
+        [AllowAnonymous]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("jwt");
+            return Ok(ApiResponse<object>.Ok(null, "Sesión cerrada."));
+        }
+
+        /// <summary>Registro público</summary>
         [HttpPost("registro")]
         [AllowAnonymous]
         public async Task<IActionResult> Registro([FromBody] RegistroPublicoRequest dto)
@@ -36,10 +51,7 @@ namespace ClubCanotajeAPI.Controller
             return Ok(ApiResponse<RegistrarUsuarioResponse>.Ok(result, "Registro exitoso. Revisa tu email para verificar tu cuenta."));
         }
 
-        /// <summary>
-        /// Registro administrativo — solo un Administrador puede usarlo.
-        /// Crea un usuario con cualquier rol sin vincular remador.
-        /// </summary>
+        /// <summary>Registro administrativo</summary>
         [HttpPost("registro/admin")]
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> RegistroAdmin([FromBody] RegistroAdminRequest dto)

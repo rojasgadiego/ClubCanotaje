@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClubCanotajeAPI.Repositories.Usuario
 {
-    public class UsuarioRepository
+    public class UsuarioRepository: IUsuarioRepository
     {
         private readonly AppDbContext _db;
         public UsuarioRepository(AppDbContext db) => _db = db;
@@ -58,8 +58,6 @@ namespace ClubCanotajeAPI.Repositories.Usuario
                 .FirstAsync(e => e.Nombre == "Activo");
             return estado.Id;
         }
-
-
 
         public async Task<UsuarioSistema> CrearConRemadorAsync(Remador remador, UsuarioSistema usuario)
         {

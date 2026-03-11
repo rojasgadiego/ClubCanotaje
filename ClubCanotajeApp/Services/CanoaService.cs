@@ -60,6 +60,14 @@ namespace ClubCanotajeAPI.Services
             return ApiResponse<List<CanoaDisponibleDto>>.Ok(dtos);
         }
 
+
+        public async Task<ApiResponse> UpdateEstadoAsync(int id, int nuevoEstado)
+        {
+            var result = await _repo.UpdateEstadoAsync(id, nuevoEstado);
+            if (!result) return ApiResponse.Fail("No se pudo actualizar el estado. Verifique el ID y el estado proporcionado.");
+            return ApiResponse.Ok();
+        }
+
         private static CanoaDto Map(Canoa c) => new(
             c.Id, c.Codigo, c.Nombre, c.TipoCanoa.Nombre,
             c.TipoCanoa.CapacidadMax, c.TipoCanoa.CapacidadMin,

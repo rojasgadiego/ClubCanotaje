@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClubCanotajeAPI.Repositories.SalidaRepository
 {
-    public class SalidaRepository
+    public class SalidaRepository: ISalidaRepository
     {
         private readonly AppDbContext _db;
         public SalidaRepository(AppDbContext db) => _db = db;

@@ -10,15 +10,15 @@ using System.Data;
 
 namespace ClubCanotajeAPI.Services
 {
-    public class SalidaService
+    public class SalidaService: ISalidaService
     {
-        private readonly SalidaRepository _salidaRepo;
-        private readonly RemadorRepository _remadorRepo;
+        private readonly ISalidaRepository _salidaRepo;
+        private readonly IRemadorRepository _remadorRepo;
         private readonly AppDbContext _db;
 
         public SalidaService(
-            SalidaRepository salidaRepo,
-            RemadorRepository remadorRepo,
+            ISalidaRepository salidaRepo,
+            IRemadorRepository remadorRepo,
             AppDbContext db)
         {
             _salidaRepo = salidaRepo;

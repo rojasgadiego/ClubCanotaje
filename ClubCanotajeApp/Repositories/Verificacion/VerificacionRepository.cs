@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClubCanotajeAPI.Repositories.Verificacion
 {
-    public class VerificacionRepository
+    public class VerificacionRepository : IVerificacionRepository
     {
         private readonly AppDbContext _db;
         public VerificacionRepository(AppDbContext db) => _db = db;

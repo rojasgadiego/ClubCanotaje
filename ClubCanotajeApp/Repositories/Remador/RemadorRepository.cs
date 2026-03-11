@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClubCanotajeAPI.Repositories.RemadorRepository
 {
-    public class RemadorRepository
+    public class RemadorRepository: IRemadorRepository
     {
         private readonly AppDbContext _db;
         public RemadorRepository(AppDbContext db) => _db = db;

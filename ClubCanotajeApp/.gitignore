@@ -1,4 +1,10 @@
-## Archivos generados por compilaci�n
+################################################################################
+# Este archivo .gitignore ha sido creado automáticamente por Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/ClubCanotaje/FileContentIndex
+
+## Archivos generados por compilación
 bin/
 obj/
 
@@ -19,12 +25,12 @@ obj/
 .DS_Store
 Thumbs.db
 
-## Archivos de publicaci�n
+## Archivos de publicación
 publish/
 *.publishsettings
 
 ## Logs
 *.log
 
-## Archivos de configuraci�n local
+## Archivos de configuración local
 appsettings.Development.json

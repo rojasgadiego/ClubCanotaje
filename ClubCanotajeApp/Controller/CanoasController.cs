@@ -27,6 +27,13 @@ namespace ClubCanotajeAPI.Controller
             return result.Success ? Ok(result) : NotFound(result);
         }
 
+        [HttpPut("{id:int}/estado")]
+        public async Task<IActionResult> UpdateEstado(int id, [FromBody] int estado)
+        {
+            var result = await _service.UpdateEstadoAsync(id, estado);
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
+
         /// <summary>
         /// Retorna canoas disponibles para un horario específico.
         /// Query params:

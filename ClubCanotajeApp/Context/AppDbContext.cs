@@ -56,18 +56,22 @@ namespace ClubCanotajeAPI.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            // ═══ CONVERSIÓN AUTOMÁTICA datetime2 → datetime ═══════
-            //foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            //{
-            //    foreach (var property in entityType.GetProperties())
-            //    {
-            //        if (property.ClrType == typeof(DateTime) ||
-            //            property.ClrType == typeof(DateTime?))
-            //        {
-            //            property.SetColumnType("datetime");
-            //        }
-            //    }
-            //}
+            // ── Precisión de decimales ────────────────────────────
+            modelBuilder.Entity<TipoMembresia>()
+                .Property(t => t.Precio)
+                .HasPrecision(10, 2);
+
+            modelBuilder.Entity<Cuota>()
+                .Property(c => c.Monto)
+                .HasPrecision(10, 2);
+
+            modelBuilder.Entity<Pago>()
+                .Property(p => p.MontoPagado)
+                .HasPrecision(10, 2);
+
+            modelBuilder.Entity<EventoResultado>()
+                .Property(e => e.Puntos)
+                .HasPrecision(10, 2);
 
             // ── Índices únicos ────────────────────────────────────
             modelBuilder.Entity<Remador>()
@@ -86,17 +90,16 @@ namespace ClubCanotajeAPI.Context
                 .HasIndex(u => u.IdRemador)
                 .IsUnique()
                 .HasFilter("[id_remador] IS NOT NULL");
-
             modelBuilder.Entity<UsuarioSistema>()
                 .HasIndex(u => u.IdInstructor)
                 .IsUnique()
                 .HasFilter("[id_instructor] IS NOT NULL");
 
-            // ── Índices para verificación ────────────────────────
+            // ── Índices para verificación ─────────────────────────
             modelBuilder.Entity<CodigoVerificacion>()
                 .HasIndex(cv => new { cv.Email, cv.Tipo, cv.Usado });
 
-            // ── Cascade delete restrictions ──────────────────────
+            // ── Cascade delete restrictions ───────────────────────
             modelBuilder.Entity<Salida>()
                 .HasOne(s => s.Responsable)
                 .WithMany()
@@ -115,8 +118,6 @@ namespace ClubCanotajeAPI.Context
             modelBuilder.Entity<Membresia>().Ignore(m => m.EstaVigente);
             modelBuilder.Entity<Salida>().Ignore(s => s.DuracionRealMin);
             modelBuilder.Entity<CodigoVerificacion>().Ignore(cv => cv.EstaVigente);
-            //modelBuilder.Entity<EventoEnfrentamiento>().Ignore(e => e.NombreParticipante1);
-            //modelBuilder.Entity<EventoEnfrentamiento>().Ignore(e => e.NombreParticipante2);
 
             // ── Relaciones de Evento ──────────────────────────────
             modelBuilder.Entity<EventoInscripcion>()

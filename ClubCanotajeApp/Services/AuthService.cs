@@ -10,17 +10,17 @@ using System.Text;
 
 namespace ClubCanotajeAPI.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
-        private readonly UsuarioRepository _usuarioRepo;
-        private readonly VerificacionRepository _verificacionRepo;
+        private readonly IUsuarioRepository _usuarioRepo;
+        private readonly IVerificacionRepository _verificacionRepo;
         private readonly EmailService _emailService;
         private readonly IConfiguration _config;
         private readonly ILogger<AuthService> _logger;
 
         public AuthService(
-            UsuarioRepository usuarioRepo,
-            VerificacionRepository verificacionRepo,
+            IUsuarioRepository usuarioRepo,
+            IVerificacionRepository verificacionRepo,
             EmailService emailService,
             IConfiguration config,
             ILogger<AuthService> logger)
@@ -34,7 +34,7 @@ namespace ClubCanotajeAPI.Services
 
         // Login
 
-        public async Task<LoginResponse> LoginAsync(LoginRequest dto)
+        public async Task<(LoginResponse response, string token)> LoginAsync(LoginRequest dto)
         {
             var usuario = await _usuarioRepo.GetByUsernameAsync(dto.Username);
 
@@ -55,10 +55,8 @@ namespace ClubCanotajeAPI.Services
                       ?? usuario.Username;
 
             var token = GenerarToken(usuario);
-            var expira = DateTime.UtcNow.AddMinutes(
-                _config.GetValue<int>("JwtSettings:ExpirationMinutes", 60));
 
-            return new LoginResponse(usuario.Id, token, expira, usuario.Username, nombre, usuario.Rol.Nombre);
+            return (new LoginResponse(usuario.Username, nombre, usuario.Rol.Nombre), token);
         }
 
         // Registro público
@@ -108,7 +106,6 @@ namespace ClubCanotajeAPI.Services
 
             var creado = await _usuarioRepo.CrearConRemadorAsync(remador, usuario);
 
-            // Email fuera de la transacción — fallo no revierte el registro
             await EnviarCodigoAsync(remador.Email, TipoVerificacion.Registro, creado.Id);
 
             return new RegistrarUsuarioResponse(creado.Username);
@@ -156,7 +153,7 @@ namespace ClubCanotajeAPI.Services
             await _verificacionRepo.MarcarComoUsadoAsync(verif);
         }
 
-       // Reenviar código 
+        // Reenviar código
 
         public async Task ReenviarCodigoAsync(string email)
         {
@@ -176,7 +173,6 @@ namespace ClubCanotajeAPI.Services
 
         public async Task SolicitarResetPasswordAsync(string email)
         {
-            // Siempre retorna sin error para no revelar si el email existe
             var remador = await _usuarioRepo.GetRemadorByEmailAsync(email);
             if (remador is null) return;
 
@@ -206,11 +202,6 @@ namespace ClubCanotajeAPI.Services
 
         // Helpers privados
 
-        /// <summary>
-        /// Genera y envía un código de verificación por email.
-        /// Si el envío falla, loguea el error y lanza ClientException.
-        /// El usuario ya quedó creado — esto NO revierte la BD.
-        /// </summary>
         private async Task EnviarCodigoAsync(
             string email,
             string tipo,

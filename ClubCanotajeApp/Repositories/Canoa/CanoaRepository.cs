@@ -66,5 +66,21 @@ namespace ClubCanotajeAPI.Repositories.CanoaRepository
                 .AsNoTracking()
                 .ToListAsync();
         }
+
+
+        public async Task<bool> UpdateEstadoAsync(int id, int nuevoEstado)
+        {
+            var c = await _db.Canoas.FindAsync(id);
+            if (c is null) return false;
+
+            bool estadoExiste = await _db.EstadosCanoa.AnyAsync(e => e.Id == nuevoEstado);
+            if (!estadoExiste) return false;
+
+            c.IdEstado = nuevoEstado;
+            c.FechaModificacion = DateTime.Now;
+            await _db.SaveChangesAsync();
+            return true;
+        }
+
     }
 }
