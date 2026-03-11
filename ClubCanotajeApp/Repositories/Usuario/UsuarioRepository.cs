@@ -1,11 +1,12 @@
 ﻿using ClubCanotajeAPI.Context;
+using ClubCanotajeAPI.Models.Dtos.Usuario;
 using ClubCanotajeAPI.Models.Entities;
 using ClubCanotajeAPI.Models.Entities.Catalogos;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClubCanotajeAPI.Repositories.Usuario
 {
-    public class UsuarioRepository: IUsuarioRepository
+    public class UsuarioRepository : IUsuarioRepository
     {
         private readonly AppDbContext _db;
         public UsuarioRepository(AppDbContext db) => _db = db;
@@ -115,6 +116,52 @@ namespace ClubCanotajeAPI.Repositories.Usuario
         {
             usuario.PasswordHash = nuevoPasswordHash;
             await _db.SaveChangesAsync();
+        }
+
+
+        public async Task<UsuarioInfoDto?> GetInfoCompletaAsync(int id)
+        {
+            var usuario = await _db.Usuarios
+                .Include(u => u.Rol)
+                .Include(u => u.Remador)
+                    .ThenInclude(r => r!.Categoria)
+                .Include(u => u.Remador)
+                    .ThenInclude(r => r!.Estado)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (usuario is null) return null;
+
+            return new UsuarioInfoDto
+            {
+                Id = usuario.Id,
+                Username = usuario.Username,
+                Rol = usuario.Rol.Nombre,
+                Activo = usuario.Activo,
+                UltimoAcceso = usuario.UltimoAcceso,
+                FechaCreacion = usuario.FechaCreacion,
+                EmailVerificado = usuario.EmailVerificado,
+
+                Remador = usuario.Remador is null ? null : new RemadorInfoDto
+                {
+                    Id = usuario.Remador.Id,
+                    NombreCompleto = usuario.Remador.NombreCompleto,
+                    Rut = usuario.Remador.Rut,
+                    Email = usuario.Remador.Email,
+                    Telefono = usuario.Remador.Telefono,
+                    FechaNacimiento = usuario.Remador.FechaNacimiento,
+                    Genero = usuario.Remador.Genero,
+                    Categoria = usuario.Remador.Categoria.Nombre,
+                    Estado = usuario.Remador.Estado.Nombre,
+                    FechaIngreso = usuario.Remador.FechaIngreso,
+                    FotoUrl = usuario.Remador.FotoUrl,
+                    CertMedicaVence = usuario.Remador.CertMedicaVence,
+                    TieneRemoPropio = usuario.Remador.TieneRemoPropio,
+                    TieneSalvavidasPropio = usuario.Remador.TieneSalvavidasPropio,
+                    Observaciones = usuario.Remador.Observaciones,
+                    NombreContactoEmergencia = usuario.Remador.NombreContactoEmergencia,
+                    TelefonoEmergencia = usuario.Remador.TelefonoEmergencia,
+                }
+            };
         }
     }
 }

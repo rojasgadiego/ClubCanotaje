@@ -1,3 +1,4 @@
+using ClubCanotajeAPI.Models.Dtos.Usuario;
 using ClubCanotajeAPI.Models.Entities;
 using ClubCanotajeAPI.Models.Entities.Catalogos;
 
@@ -21,4 +22,5 @@ public interface IUsuarioRepository
     Task<Remador?> GetRemadorByEmailAsync(string email);
     Task ActivarUsuarioAsync(UsuarioSistema usuario);
     Task CambiarPasswordAsync(UsuarioSistema usuario, string nuevoPasswordHash);
+    Task<UsuarioInfoDto?> GetInfoCompletaAsync(int id);
 }

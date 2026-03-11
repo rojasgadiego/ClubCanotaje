@@ -1,6 +1,6 @@
-using ClubCanotajeAPI.Models.Dtos;
 using ClubCanotajeAPI.Models.Entities.Catalogos;
 using ClubCanotajeAPI.Repositories.MantenedorRepository;
+using ClubCanotajeAPI.Models.Dtos.Common;
 
 namespace ClubCanotajeAPI.Services
 {

@@ -12,6 +12,7 @@ using ClubCanotajeAPI.Repositories.SalidaRepository;
 using ClubCanotajeAPI.Repositories.Usuario;
 using ClubCanotajeAPI.Repositories.Verificacion;
 using ClubCanotajeAPI.Services;
+using ClubCanotajeAPI.Services.Usuario;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +51,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IRemadorRepository, RemadorRepository>();
 // builder.Services.AddScoped<CanoaRepository>();
 builder.Services.AddScoped<ISalidaRepository, SalidaRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 // builder.Services.AddScoped<ImplementoRepository>();
 // builder.Services.AddScoped<MembresiaRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
@@ -59,6 +61,7 @@ builder.Services.AddScoped<IVerificacionRepository, VerificacionRepository>();
 
 // ── Servicios ──────────────────────────────────────────────────────────────
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<EmailService>();
 // builder.Services.AddScoped<RemadorService>();
 // builder.Services.AddScoped<CanoaService>();

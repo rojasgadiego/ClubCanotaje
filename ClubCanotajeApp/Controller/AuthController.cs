@@ -1,9 +1,11 @@
-﻿using ClubCanotajeAPI.Models.Dtos;
+﻿using ClubCanotajeAPI.Models.Dtos.Common;
 using ClubCanotajeAPI.Models.Dtos.Auth;
 using ClubCanotajeAPI.Models.Dtos.Validacion;
 using ClubCanotajeAPI.Services;
+using ClubCanotajeAPI.Services.Usuario;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ClubCanotajeAPI.Controller
 {
@@ -12,8 +14,13 @@ namespace ClubCanotajeAPI.Controller
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _service;
+        private readonly IUsuarioService _usuarioService;
 
-        public AuthController(IAuthService service) => _service = service;
+        public AuthController(IAuthService service, IUsuarioService usuarioService)
+        {
+            _service = service;
+            _usuarioService = usuarioService;
+        }
 
         /// <summary>Login → guarda JWT en cookie HttpOnly</summary>
         [HttpPost("login")]
@@ -94,6 +101,25 @@ namespace ClubCanotajeAPI.Controller
         {
             await _service.ResetPasswordAsync(dto.Email, dto.Codigo, dto.NuevaPassword);
             return Ok(ApiResponse<object>.Ok(null, "Contraseña restablecida exitosamente. Ya puedes iniciar sesión."));
+        }
+
+
+        /// <summary>Retorna el usuario autenticado desde el JWT</summary>
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> Me()
+        {
+            var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (idClaim is null || !int.TryParse(idClaim, out var id))
+                return Unauthorized(ApiResponse.Fail("Token inválido."));
+
+            var result = await _usuarioService.GetInfoCompletaAsync(id);
+
+            if (!result.Success)
+                return NotFound(result);
+
+            return Ok(result);
         }
     }
 }

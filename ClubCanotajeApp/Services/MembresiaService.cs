@@ -1,9 +1,9 @@
 ﻿using ClubCanotajeAPI.Context;
-using ClubCanotajeAPI.Models.Dtos.Common;
 using ClubCanotajeAPI.Models.Dtos.Membresia;
 using ClubCanotajeAPI.Models.Dtos.Remador;
 using ClubCanotajeAPI.Models.Entities;
 using ClubCanotajeAPI.Repositories.MembresiaRepository;
+using ClubCanotajeAPI.Models.Dtos.Common;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
